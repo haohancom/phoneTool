@@ -22,7 +22,7 @@ public class ToolApplication implements CommandLineRunner {
 	private String url;
 
 	@Autowired
-	private NettyServer echoServer;
+	private NettyServer nettyServer;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ToolApplication.class, args);
@@ -30,16 +30,11 @@ public class ToolApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		ChannelFuture future = echoServer.start(url, port);
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				echoServer.destroy();
-			}
-		});
+		ChannelFuture future = nettyServer.start(url, port);
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> nettyServer.destroy()));
 		TimeUnit.SECONDS.sleep(5);
 		log.info("server try to write msg");
-		echoServer.writeMsg("server try to write msg");
+		nettyServer.writeMsg("server try to write msg");
 		future.channel().closeFuture().syncUninterruptibly();
 	}
 }
