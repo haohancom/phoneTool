@@ -8,10 +8,11 @@ import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class NettyClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
-        log.info("service send msg : {}", o.toString());
+    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
+        ByteBuf in = (ByteBuf) msg;
+        log.info("service send msg : {}", in.toString(CharsetUtil.UTF_8));
     }
 
     @Override
@@ -27,6 +28,6 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-        System.out.println("Client received: "+ byteBuf.toString(CharsetUtil.UTF_8));
+        System.out.println("Client received: " + byteBuf.toString(CharsetUtil.UTF_8));
     }
 }

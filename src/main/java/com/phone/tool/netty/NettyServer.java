@@ -1,6 +1,7 @@
 package com.phone.tool.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -8,22 +9,50 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Component
-public class EchoServer {
+public class NettyServer {
 
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private Channel channel;
 
+    private Map<String, Integer> clientMap = new HashMap<>();
+
+    public synchronized void setClient(String name) {
+        this.clientMap.put(name, 1);
+    }
+
+    public synchronized void removeClient(String name) {
+        this.clientMap.remove(name);
+    }
+
+    public synchronized boolean getClientMapSize() {
+        return this.clientMap.size() > 0;
+    }
+
+    private Map<String, Channel> channelMap = new HashMap<>();
+
+    public synchronized void setChannel(String name, Channel channel) {
+        this.channelMap.put(name, channel);
+    }
+
+    public synchronized Map<String, Channel> getChannelMap() {
+        return this.channelMap;
+    }
+
     public ChannelFuture start(String hostname, int port) throws Exception {
 
-        final EchoServerHandler serverHandler = new EchoServerHandler();
+        final NettyServerHandler serverHandler = new NettyServerHandler(NettyServer.this);
         ChannelFuture f = null;
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -51,6 +80,34 @@ public class EchoServer {
         }
         return f;
     }
+
+    public boolean writeMsg(String msg) {
+        boolean errorFlag = false;
+        Map<String, Channel> channelMap = getChannelMap();
+        if (channelMap.size() == 0) {
+            log.info("channel size is 0");
+            return true;
+        }
+        Set<String> keySet = clientMap.keySet();
+        for (String key : keySet) {
+            try {
+                Channel channel = channelMap.get(key);
+                if (!channel.isActive()) {
+                    log.info("channel {} is inactive", channel);
+                    errorFlag = true;
+                    continue;
+                }
+                log.info("channel {} is active", channel);
+                String s = msg + System.getProperty("line.separator");
+                // can not send string directly without using Unpooled.copiedBuffer
+                channel.writeAndFlush(Unpooled.copiedBuffer(s, CharsetUtil.UTF_8));
+            } catch (Exception e) {
+                errorFlag = true;
+            }
+        }
+        return errorFlag;
+    }
+
 
     public void destroy() {
         log.info("Shutdown Netty Server...");

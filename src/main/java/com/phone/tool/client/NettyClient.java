@@ -10,17 +10,17 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
 
-public class EchoClient {
+public class NettyClient {
     private final String host;
     private final int port;
 
-    public EchoClient(String host, int port) {
+    public NettyClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
     public static void main(String[] args) throws Exception {
-        new EchoClient("127.0.0.1",9000).start();
+        new NettyClient("127.0.0.1",9000).start();
     }
 
     private void start() throws Exception {
@@ -34,11 +34,10 @@ public class EchoClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new EchoClientHandler());
+                            socketChannel.pipeline().addLast(new NettyClientHandler());
                         }
                     });
             ChannelFuture f = b.connect().sync();
-
             f.channel().closeFuture().sync();
         } catch (Exception e) {
             group.shutdownGracefully().sync();
