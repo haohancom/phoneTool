@@ -27,7 +27,7 @@ public class DBInitializeConfig {
                             "delay varchar(128) ," +
                             "sender varchar(128) not null," +
                             "receiver varchar(128) not null," +
-                            "function varchar(128) not null," +
+                            "function_name varchar(128) not null," +
                             "description varchar(128) )"
             ) ;
             statement.close();

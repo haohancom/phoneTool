@@ -1,11 +1,16 @@
 package com.phone.tool.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phone.tool.dto.CommandDTO;
 import com.phone.tool.dto.DTOData;
 import com.phone.tool.service.CommandsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/phone/tool/api")
 public class CommandsController {
@@ -32,7 +37,8 @@ public class CommandsController {
 
     @PostMapping(path = "/command")
     @ResponseBody
-    public void addCommand(@RequestBody String content) {
-
+    public void addCommand(@RequestBody String content) throws JsonProcessingException {
+        CommandDTO commandDTO = new ObjectMapper().readValue(content, CommandDTO.class);
+        commandsService.insertCommands(commandDTO);
     }
 }

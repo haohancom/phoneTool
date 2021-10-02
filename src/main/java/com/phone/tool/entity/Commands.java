@@ -21,10 +21,9 @@ public class Commands {
     @Column(name = "receiver")
     private String receiver;
 
-    @Column(name = "function")
-    private String function;
+    @Column(name = "function_name")
+    private String function_name;
 
-    @Lob
     @Column(name = "description")
     private String description;
 
@@ -48,8 +47,8 @@ public class Commands {
         return receiver;
     }
 
-    public String getFunction() {
-        return function;
+    public String getFunction_name() {
+        return function_name;
     }
 
     public String getDescription() {
@@ -76,8 +75,8 @@ public class Commands {
         this.receiver = receiver;
     }
 
-    public void setFunction(String function) {
-        this.function = function;
+    public void setFunction_name(String function) {
+        this.function_name = function;
     }
 
     public void setDescription(String description) {

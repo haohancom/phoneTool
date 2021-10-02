@@ -3,6 +3,7 @@ package com.phone.tool.service;
 import com.phone.tool.dao.CommandDao;
 import com.phone.tool.dto.CommandDTO;
 import com.phone.tool.entity.Commands;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CommandsService {
     @Autowired
     CommandDao commandDao;
@@ -34,8 +36,21 @@ public class CommandsService {
         commands.setDelay(delay);
         commands.setSender(sender);
         commands.setReceiver(receiver);
-        commands.setFunction(function);
+        commands.setFunction_name(function);
         commands.setDescription(description);
+        return commandDao.createCommands(commands);
+    }
+
+    public Commands insertCommands(CommandDTO commandDTO) {
+        Commands commands = new Commands();
+        commands.setRequest(commandDTO.getRequest());
+        commands.setResponse(commandDTO.getResponse());
+        commands.setDelay(commandDTO.getDelay());
+        commands.setSender(commandDTO.getSender());
+        commands.setReceiver(commandDTO.getReceiver());
+        commands.setFunction_name(commandDTO.getFunction());
+        commands.setDescription(commandDTO.getDescription());
+        log.info("commands : {}", commands);
         return commandDao.createCommands(commands);
     }
 }

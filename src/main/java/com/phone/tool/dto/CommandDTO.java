@@ -1,6 +1,8 @@
 package com.phone.tool.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.phone.tool.entity.Commands;
 
 public class CommandDTO {
@@ -12,23 +14,31 @@ public class CommandDTO {
     private String function;
     private String description;
 
+    @JsonCreator
     public CommandDTO(Commands commands) {
         request = commands.getRequest();
         response = commands.getResponse();
         delay = commands.getDelay();
         sender = commands.getSender();
         receiver = commands.getReceiver();
-        function = commands.getFunction();
+        function = commands.getFunction_name();
         description = commands.getDescription();
     }
 
-    public CommandDTO(String request, String response, String delay, String sender, String receiver, String function, String description) {
+    @JsonCreator
+    public CommandDTO(@JsonProperty("request") String request,
+                      @JsonProperty("response") String response,
+                      @JsonProperty("delay") String delay,
+                      @JsonProperty("sender") String sender,
+                      @JsonProperty("receiver") String receiver,
+                      @JsonProperty("function_name") String function_name,
+                      @JsonProperty("description") String description) {
         this.request = request;
         this.response = response;
         this.delay = delay;
         this.sender = sender;
         this.receiver = receiver;
-        this.function = function;
+        this.function = function_name;
         this.description = description;
     }
 
