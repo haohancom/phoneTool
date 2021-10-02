@@ -15,7 +15,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 @Controller
 @RequestMapping("/netty/api")
-public class ToolController {
+public class NettyController {
     @Autowired
     NettyServer nettyServer;
 
