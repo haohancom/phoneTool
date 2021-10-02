@@ -1,32 +1,36 @@
-package com.phone.tool.entity;
+package com.phone.tool.dto;
 
-import javax.persistence.*;
 
-@Table(name = "Commands")
-@Entity
-public class Commands {
-    @Id
-    @Column(name = "request")
+import com.phone.tool.entity.Commands;
+
+public class CommandDTO {
     private String request;
-
-    @Column(name = "response")
     private String response;
-
-    @Column(name = "delay") // seconds
     private String delay;
-
-    @Column(name = "sender")
     private String sender;
-
-    @Column(name = "receiver")
     private String receiver;
-
-    @Column(name = "function")
     private String function;
-
-    @Lob
-    @Column(name = "description")
     private String description;
+
+    public CommandDTO(Commands commands) {
+        request = commands.getRequest();
+        response = commands.getResponse();
+        delay = commands.getDelay();
+        sender = commands.getSender();
+        receiver = commands.getReceiver();
+        function = commands.getFunction();
+        description = commands.getDescription();
+    }
+
+    public CommandDTO(String request, String response, String delay, String sender, String receiver, String function, String description) {
+        this.request = request;
+        this.response = response;
+        this.delay = delay;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.function = function;
+        this.description = description;
+    }
 
     public String getRequest() {
         return request;

@@ -21,14 +21,14 @@ public class DBInitializeConfig {
             Connection connection = dataSource.getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(
-                    "CREATE TABLE IF NOT EXISTS Logs(" +
-                            "id varchar(128) Primary key, " +
-                            "conf_id varchar(128) not null," +
-                            "conf_name varchar(128) not null," +
-                            "user_name varchar(128) not null," +
-                            "date_time varchar(128) not null, " +
-                            "raw_data blob not null," +
-                            "formatted_data blob )"
+                    "CREATE TABLE IF NOT EXISTS Commands(" +
+                            "request varchar(128) Primary key," +
+                            "response varchar(128) ," +
+                            "delay varchar(128) ," +
+                            "sender varchar(128) not null," +
+                            "receiver varchar(128) not null," +
+                            "function varchar(128) not null," +
+                            "description varchar(128) )"
             ) ;
             statement.close();
             connection.close();
