@@ -38,10 +38,4 @@ public class NettyService {
             future.channel().closeFuture().syncUninterruptibly();
         }).start();
     }
-
-    public void writeMsg(String msg) {
-        log.info("server try to write msg : {}", msg);
-        nettyServer.writeMsg(msg);
-
-    }
 }

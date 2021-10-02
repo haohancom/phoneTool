@@ -23,8 +23,7 @@ public class NettyClient {
         new NettyClient("127.0.0.1",9000).start();
     }
 
-    private void start() throws Exception {
-
+    private void start() throws InterruptedException {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -33,14 +32,15 @@ public class NettyClient {
                     .remoteAddress(new InetSocketAddress(host, port))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(new NettyClientHandler());
                         }
                     });
             ChannelFuture f = b.connect().sync();
             f.channel().closeFuture().sync();
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             group.shutdownGracefully().sync();
+            throw e;
         }
     }
 }

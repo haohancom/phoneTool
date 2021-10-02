@@ -83,7 +83,7 @@ public class NettyServer {
 
     public boolean writeMsg(String msg) {
         boolean errorFlag = false;
-        Map<String, Channel> channelMap = getChannelMap();
+        channelMap = getChannelMap();
         if (channelMap.size() == 0) {
             log.info("channel size is 0");
             return true;
@@ -91,7 +91,7 @@ public class NettyServer {
         Set<String> keySet = clientMap.keySet();
         for (String key : keySet) {
             try {
-                Channel channel = channelMap.get(key);
+                channel = channelMap.get(key);
                 if (!channel.isActive()) {
                     log.info("channel {} is inactive", channel);
                     errorFlag = true;
