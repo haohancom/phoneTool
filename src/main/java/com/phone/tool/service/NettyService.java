@@ -36,4 +36,8 @@ public class NettyService {
             future.channel().closeFuture().syncUninterruptibly();
         }).start();
     }
+
+    public void execute(String request) {
+        nettyServer.writeMsg(request);
+    }
 }
