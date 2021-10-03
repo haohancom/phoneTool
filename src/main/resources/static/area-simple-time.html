@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+</head>
+
+<body style="height: 100%; margin: 0">
+    <!-- <div role="tablist" class="el-tabs__nav is-top" style="transform: translateX(0px);">
+        <button type="button" id="btn-audio">Audio</button>
+        <button type="button" id="btn-video">Video</button>
+        <button type="button" id="btn-sharing">Sharing</button>
+    </div> -->
+    <div class="el-tabs__header is-top">
+        <div class="el-tabs__nav-wrap is-top">
+            <div class="el-tabs__nav-scroll">
+                <div role="tablist" class="el-tabs__nav is-top" style="transform: translateX(0px);">
+                    <button id="btn-audio" aria-controls="pane-audio" role="tab" tabindex="0" class="el-tabs__item is-top is-active">Audio</button>
+                    <button id="btn-video" aria-controls="pane-video" role="tab" tabindex="-1" class="el-tabs__item is-top">Video</button>
+                    <button id="btn-sharing" aria-controls="pane-sharing" role="tab" tabindex="-1" class="el-tabs__item is-top">Sharing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="audiofigure" style="height: 100%">
+        <div id="mediaStatusaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="signalStatusaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="pdrReceivedaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="avgJitterDelayaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="bitrateReceivedaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="bitrateSentaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="jitterReceivedaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="jitterSentaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="packetsReceivedaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="packetsSentaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="rttaudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="remotePdraudio" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="deviceChange" style="height: 50%;width: 70%;margin-top:100px"></div>
+    </div>
+    <div id="videofigure" style="height: 100%;display:none" >
+        <div id="mediaStatusvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="signalStatusvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="pdrReceivedvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="avgJitterDelayvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="bitrateReceivedvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="bitrateSentvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="jitterReceivedvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="jitterSentvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="packetsReceivedvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="packetsSentvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="rttvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="remotePdrvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="fHeightReceivedvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="fHeightSentvideo" style="height: 50%;width: 70%;margin-top:100px"></div>
+    </div>
+    <div id="sharingfigure" style="height: 100%;display:none" >
+        <div id="mediaStatussharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="signalStatussharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="pdrReceivedsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="avgJitterDelaysharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="bitrateReceivedsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="bitrateSentsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="jitterReceivedsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="jitterSentsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="packetsReceivedsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="packetsSentsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="rttsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+        <div id="remotePdrsharing" style="height: 50%;width: 70%;margin-top:100px"></div>
+    </div>
+
+    <script type="text/javascript" src="js/echarts.min.js"></script> 
+    <script src="js/index.js"></script>
+</body>
+
+</html>
