@@ -11,8 +11,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +23,18 @@ import java.util.Set;
 @Slf4j
 @Component
 public class NettyServer {
+    @Autowired
+    NettyServerHandler nettyServerHandler;
 
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private Channel channel;
-
     private Map<String, Integer> clientMap = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        nettyServerHandler.setNettyServer(NettyServer.this);
+    }
 
     public synchronized void setClient(String name) {
         this.clientMap.put(name, 1);
@@ -50,9 +58,7 @@ public class NettyServer {
         return this.channelMap;
     }
 
-    public ChannelFuture start(String hostname, int port) throws Exception {
-
-        final NettyServerHandler serverHandler = new NettyServerHandler(NettyServer.this);
+    public ChannelFuture start(String hostname, int port) {
         ChannelFuture f = null;
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -61,8 +67,8 @@ public class NettyServer {
                     .localAddress(new InetSocketAddress(hostname,port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(serverHandler);
+                        protected void initChannel(SocketChannel socketChannel) {
+                            socketChannel.pipeline().addLast(nettyServerHandler);
                         }
                     });
 

@@ -17,6 +17,8 @@ public class CommandsController {
     @Autowired
     CommandsService commandsService;
 
+    // todo : add update response function
+    // todo : add update delay function
     @GetMapping(path = "/commands")
     @ResponseBody
     public DTOData getAllCommands() {
@@ -26,6 +28,7 @@ public class CommandsController {
     @GetMapping(path = "/command/{id}")
     @ResponseBody
     public DTOData getCommandById(@PathVariable("id") String id) {
+        log.info("get command by id : {}", id);
         return new DTOData(commandsService.getCommandsById(id));
     }
 
