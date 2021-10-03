@@ -11,7 +11,7 @@ public class CommandDTO {
     private String delay;
     private String sender;
     private String receiver;
-    private String function;
+    private String function_name;
     private String description;
 
     @JsonCreator
@@ -21,7 +21,7 @@ public class CommandDTO {
         delay = commands.getDelay();
         sender = commands.getSender();
         receiver = commands.getReceiver();
-        function = commands.getFunction_name();
+        function_name = commands.getFunction_name();
         description = commands.getDescription();
     }
 
@@ -38,7 +38,7 @@ public class CommandDTO {
         this.delay = delay;
         this.sender = sender;
         this.receiver = receiver;
-        this.function = function_name;
+        this.function_name = function_name;
         this.description = description;
     }
 
@@ -62,8 +62,8 @@ public class CommandDTO {
         return receiver;
     }
 
-    public String getFunction() {
-        return function;
+    public String getFunction_name() {
+        return function_name;
     }
 
     public String getDescription() {
@@ -90,8 +90,8 @@ public class CommandDTO {
         this.receiver = receiver;
     }
 
-    public void setFunction(String function) {
-        this.function = function;
+    public void setFunction_name(String function_name) {
+        this.function_name = function_name;
     }
 
     public void setDescription(String description) {

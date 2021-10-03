@@ -4,7 +4,6 @@ import com.phone.tool.dao.CommandDao;
 import com.phone.tool.dto.CommandDTO;
 import com.phone.tool.entity.Commands;
 import com.phone.tool.exception.ToolException;
-import com.sun.istack.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +53,7 @@ public class CommandsService {
         commands.setDelay(commandDTO.getDelay());
         commands.setSender(commandDTO.getSender());
         commands.setReceiver(commandDTO.getReceiver());
-        commands.setFunction_name(commandDTO.getFunction());
+        commands.setFunction_name(commandDTO.getFunction_name());
         commands.setDescription(commandDTO.getDescription());
         log.info("commands : {}", commands);
         return commandDao.createCommands(commands);
