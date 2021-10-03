@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phone.tool.dto.CommandDTO;
 import com.phone.tool.dto.DTOData;
+import com.phone.tool.dto.ExecutionResponse;
 import com.phone.tool.service.CommandsService;
 import com.phone.tool.service.NettyService;
 import com.sun.istack.NotNull;
@@ -30,7 +31,7 @@ public class CommandsController {
 
     @PostMapping(path = "/command/query")
     @ResponseBody
-    public DTOData getCommandById(@RequestParam("id") String id) {
+    public DTOData getCommandById(@NotNull @RequestParam("id") String id) {
         log.info("get command by id : {}", id);
         return new DTOData(commandsService.getCommandsById(id));
     }
@@ -62,7 +63,7 @@ public class CommandsController {
 
     @PostMapping(path = "/command/execute")
     @ResponseBody
-    public void executeCommand(@NotNull @RequestParam("id") String id) {
-        nettyService.execute(id);
+    public ExecutionResponse executeCommand(@NotNull @RequestParam("id") String id) {
+        return new ExecutionResponse(nettyService.execute(id));
     }
 }

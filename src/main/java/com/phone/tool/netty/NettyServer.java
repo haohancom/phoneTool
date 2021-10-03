@@ -30,6 +30,16 @@ public class NettyServer {
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private Channel channel;
     private Map<String, Integer> clientMap = new HashMap<>();
+    private boolean waitForResponse = false;
+    private String response;
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
 
     @PostConstruct
     public void init() {
@@ -58,6 +68,15 @@ public class NettyServer {
         return this.channelMap;
     }
 
+
+    public void setWaitForResponse(boolean waitForResponse) {
+        this.waitForResponse = waitForResponse;
+    }
+
+    public boolean isWaitForResponse() {
+        return waitForResponse;
+    }
+
     public ChannelFuture start(String hostname, int port) {
         ChannelFuture f = null;
         try {
@@ -74,7 +93,7 @@ public class NettyServer {
 
             f = b.bind().sync();
             channel = f.channel();
-            log.info("======EchoServer startup=========");
+            log.info("======NettyServer startup=========");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

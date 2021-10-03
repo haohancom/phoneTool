@@ -72,7 +72,7 @@ public class CommandsService {
     public void validateDelay(String delay) {
         if (ObjectUtils.isEmpty(delay)) return;
         try {
-            Integer.valueOf(delay);
+            Long.valueOf(delay);
         } catch (Exception e) {
             throw new ToolException(SC_BAD_REQUEST, "invalid delay param !");
         }
