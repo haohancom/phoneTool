@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
 public class NettyServerHandler extends ChannelHandlerAdapter {
@@ -38,6 +40,9 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
         log.info("server received command: {}", id);
         CommandDTO commandDTO = new CommandDTO(commandDao.getById(id));
         log.info("should return response : {}", commandDTO.getResponse());
+        try {
+            TimeUnit.MILLISECONDS.sleep(Integer.parseInt(commandDTO.getDelay()));
+        } catch (Exception ignored) {}
         ctx.writeAndFlush(Unpooled.copiedBuffer(commandDTO.getResponse(), CharsetUtil.UTF_8));
     }
 
