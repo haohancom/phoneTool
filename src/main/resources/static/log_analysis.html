@@ -16,12 +16,10 @@
 
 	<script>
 		function deleteCommands(id) {
-			alert(id)
-			id.replace("\\", "%5C");
-			alert(id);
 			$.ajax({
 				type: 'DELETE',
-				url: "/phone/tool/api/command/" + id,
+				url: "/phone/tool/api/command",
+				data: { "id": id },
 				success: function (result) {
 					window.location.reload();
 				},
@@ -93,16 +91,17 @@
 					},
 					{
 						data: "description",
-						// render: function (data, type, row, meta) {
-						// 	var actionHtml;
+						render: function (data, type, row, meta) {
+							var actionHtml;
 							// if (row.sender === "server") {
 							// 	actionHtml = '<a href=javascript:viewLogsDetail("' + row.uuid + '")>View</a> ';
 							// }
 
 							// actionHtml = actionHtml + ' | <a href=javascript:deleteCommands("' + row.request + '")>Delete</a>';
-							// actionHtml = ' | <a href=javascript:deleteCommands("' + row.request + '")>Delete</a>';
-							// return actionHtml;
-						// }
+                            var id = row.request.replaceAll("\\", "\\\\");
+							actionHtml = ' | <a href=javascript:deleteCommands("' + id + '")>Delete</a>';
+                            return actionHtml;
+						}
 					}
 				]
 			});

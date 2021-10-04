@@ -36,9 +36,9 @@ public class CommandsController {
         return new DTOData(commandsService.getCommandsById(id));
     }
 
-    @DeleteMapping(path = "/command/{id}")
+    @DeleteMapping(path = "/command")
     @ResponseBody
-    public void deleteCommandById(@PathVariable("id") String id) {
+    public void deleteCommandById(@NotNull @RequestParam("id") String id) {
         commandsService.deleteCommands(id);
     }
 
