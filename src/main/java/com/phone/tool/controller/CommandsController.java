@@ -32,7 +32,6 @@ public class CommandsController {
     @PostMapping(path = "/command/query")
     @ResponseBody
     public DTOData getCommandById(@NotNull @RequestParam("id") String id) {
-        log.info("get command by id : {}", id);
         return new DTOData(commandsService.getCommandsById(id));
     }
 

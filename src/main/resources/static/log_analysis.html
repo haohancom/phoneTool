@@ -24,7 +24,7 @@
 					window.location.reload();
 				},
 				error: function (result) {
-					alert("command deleted failed ")
+					alert("command deleted failed !")
 				}
 			});
 		}
@@ -35,15 +35,32 @@
 				url: "/phone/tool/api/command/execute",
 				data: { "id": id },
 				success: function (result) {
-					// window.location.reload();
 				},
 				error: function (result) {
-					alert("command deleted failed ")
+					alert("command executed failed !")
 				}
 			}).done(function (data) {
 				var response = JSON.parse(JSON.stringify(data))["response"];
 				if ((response !== null) && (response !== "")) {
 					alert("response : " + response);
+				}
+			});
+		}
+
+		function queryCommandsAndCpoy(id) {
+			$.ajax({
+				type: 'POST',
+				url: "/phone/tool/api/command/query",
+				data: { "id": id },
+				success: function (result) {
+				},
+				error: function (result) {
+					alert("query failed !")
+				}
+			}).done(function (data) {
+				var response = JSON.parse(JSON.stringify(data))["data"];
+				if ((response !== null) && (response !== "")) {
+					navigator.clipboard.writeText(JSON.stringify(response, null, 1));
 				}
 			});
 		}
@@ -94,7 +111,8 @@
 						render: function (data, type, row, meta) {
 							var actionHtml;
                             var id = row.request.replaceAll("\\", "\\\\");
-							actionHtml = '<a href=javascript:deleteCommands("' + id + '")>Delete</a>';
+							actionHtml = '<a href=javascript:queryCommandsAndCpoy("' + id + '")>Copy</a>';
+							actionHtml = actionHtml + ' | <a href=javascript:deleteCommands("' + id + '")>Delete</a>';
 							if (row.sender === "server") {
 								actionHtml = actionHtml + ' | <a href=javascript:execute("' + id + '")>Execute</a> ';
 							}
