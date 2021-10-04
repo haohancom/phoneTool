@@ -60,7 +60,7 @@
 			}).done(function (data) {
 				var response = JSON.parse(JSON.stringify(data))["data"];
 				if ((response !== null) && (response !== "")) {
-					navigator.clipboard.writeText(JSON.stringify(response, null, 1));
+					navigator.clipboard.writeText(JSON.stringify(response, null, 1).replaceAll("\\\\", "\\"));
 				}
 			});
 		}
