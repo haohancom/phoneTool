@@ -111,7 +111,7 @@
 			getCommandsTable();
 
 			$("#insert").click(function() {
-				var json = $("#command_json").val();
+				var json = $("#command_json").val().replaceAll("\\", "\\\\");
 				insertCommand(json);
 			})
 
@@ -126,7 +126,7 @@
 	<div id="inputbox">
 		<p>please input Commands info to create Commands</p>
 		<p>commands_info : <input id="command_json" type="text"></p>
-		<p>e.g. : { "request": "S010\\n", "response": "OK\\n", "delay": "", "sender": "client", "receiver": "server", "function_name": "关闭LED光源", "description": "通知下位机关闭外观测试用的光源" }</p>
+		<p>e.g. : { "request": "S010\n", "response": "OK\n", "delay": "", "sender": "client", "receiver": "server", "function_name": "关闭LED光源", "description": "通知下位机关闭外观测试用的光源" }</p>
 	</div>
 	<button id="insert" class="ui-button ui-widget ui-corner-all">insert</button>
 
