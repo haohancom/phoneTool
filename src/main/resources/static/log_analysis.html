@@ -41,7 +41,10 @@
 					alert("command deleted failed ")
 				}
 			}).done(function (data) {
-				alert("response : " + JSON.parse(JSON.stringify(data))["response"]);
+				var response = JSON.parse(JSON.stringify(data))["response"];
+				if ((response !== null) && (response !== "")) {
+					alert("response : " + response);
+				}
 			});
 		}
 
