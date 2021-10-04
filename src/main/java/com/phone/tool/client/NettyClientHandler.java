@@ -29,5 +29,6 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
         System.out.println("Client received: " + byteBuf.toString(CharsetUtil.UTF_8));
+        // todo : mock response
     }
 }

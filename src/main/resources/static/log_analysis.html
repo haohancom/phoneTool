@@ -29,17 +29,19 @@
 			});
 		}
 
-		function analyseLogsDetail(id) {
+		function execute(id) {
 			$.ajax({
 				type: 'POST',
-				url: "/pan/tool/api/log/analyse/" + id,
+				url: "/phone/tool/api/command/execute",
+				data: { "id": id },
 				success: function (result) {
-					window.location.reload();
+					// window.location.reload();
 				},
 				error: function (result) {
-					alert("Row ANALYSE failed ")
+					alert("command deleted failed ")
 				}
-
+			}).done(function (data) {
+				alert("response : " + JSON.parse(JSON.stringify(data))["response"]);
 			});
 		}
 
@@ -57,11 +59,6 @@
 				}
 
 			});
-		}
-
-		function viewLogsDetail(id) {
-			var analysewin = window.open('area-simple-time.html?id=' + id);
-			console.log("view log,id=" + id);
 		}
 
 		function getCommandsTable(){
@@ -93,13 +90,11 @@
 						data: "description",
 						render: function (data, type, row, meta) {
 							var actionHtml;
-							// if (row.sender === "server") {
-							// 	actionHtml = '<a href=javascript:viewLogsDetail("' + row.uuid + '")>View</a> ';
-							// }
-
-							// actionHtml = actionHtml + ' | <a href=javascript:deleteCommands("' + row.request + '")>Delete</a>';
                             var id = row.request.replaceAll("\\", "\\\\");
-							actionHtml = ' | <a href=javascript:deleteCommands("' + id + '")>Delete</a>';
+							actionHtml = '<a href=javascript:deleteCommands("' + id + '")>Delete</a>';
+							if (row.sender === "server") {
+								actionHtml = actionHtml + ' | <a href=javascript:execute("' + id + '")>Execute</a> ';
+							}
                             return actionHtml;
 						}
 					}
