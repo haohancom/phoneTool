@@ -38,7 +38,7 @@ public class NettyClient {
                     });
             ChannelFuture f = b.connect().sync();
             f.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             group.shutdownGracefully().sync();
             throw e;
         }

@@ -50,7 +50,7 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
             // response to client
             try {
                 TimeUnit.MILLISECONDS.sleep(Long.parseLong(commandDTO.getDelay()));
-            } catch (InterruptedException ignored) {}
+            } catch (Exception ignored) {}
 
             log.info("should return response : {}", commandDTO.getResponse());
             ctx.writeAndFlush(Unpooled.copiedBuffer(commandDTO.getResponse(), CharsetUtil.UTF_8));

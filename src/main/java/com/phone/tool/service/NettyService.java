@@ -65,7 +65,7 @@ public class NettyService {
             TimeUnit.MILLISECONDS.sleep(200);
             if (!ObjectUtils.isEmpty(commandDTO.getDelay()))
                 TimeUnit.MILLISECONDS.sleep(Long.parseLong(commandDTO.getDelay()));
-        } catch (InterruptedException ignored) {}
+        } catch (Exception ignored) {}
         nettyServer.setWaitForResponse(false);
         return nettyServer.getResponse();
     }

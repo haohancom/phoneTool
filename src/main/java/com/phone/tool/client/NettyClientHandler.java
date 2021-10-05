@@ -17,7 +17,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(Unpooled.copiedBuffer("S007\\n", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("F001\\n", CharsetUtil.UTF_8));
     }
 
     @Override
