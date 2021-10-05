@@ -5,6 +5,7 @@ import com.phone.tool.dto.CommandDTO;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
+@ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelHandlerAdapter {
     @Autowired
     private CommandDao commandDao;
