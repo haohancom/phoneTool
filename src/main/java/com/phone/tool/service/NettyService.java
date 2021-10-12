@@ -47,6 +47,21 @@ public class NettyService {
         }).start();
     }
 
+    public void addNetty(int nettyPort) {
+        new Thread(() -> {
+            log.info("add netty whose port is {} ...", nettyPort);
+            ChannelFuture future = null;
+            try {
+                future = nettyServer.start(url, nettyPort);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> nettyServer.destroy()));
+            assert future != null;
+            future.channel().closeFuture().syncUninterruptibly();
+        }).start();
+    }
+
     public String execute(String request) {
         CommandDTO commandDTO = new CommandDTO(commandDao.getById(request));
         if (!"server".equals(commandDTO.getSender())) throw new ToolException(SC_BAD_REQUEST, "sender must be server!");
