@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -31,28 +32,31 @@ public class NettyService {
     @Value("${netty.url}")
     private String url;
 
+    private ChannelFuture future = null;
+    private CountDownLatch latch = new CountDownLatch(1);
+
     @PostConstruct
     public void initNetty() {
         new Thread(() -> {
             log.info("init netty ...");
-            ChannelFuture future = null;
+            ChannelFuture startFuture = null;
             try {
-                future = nettyServer.start(url, port);
+                startFuture = nettyServer.start(url, port);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Runtime.getRuntime().addShutdownHook(new Thread(() -> nettyServer.destroy()));
-            assert future != null;
-            future.channel().closeFuture().syncUninterruptibly();
+            assert startFuture != null;
+            startFuture.channel().closeFuture().syncUninterruptibly();
         }).start();
     }
 
-    public void addNetty(int nettyPort) {
+    public ChannelFuture addNetty(int nettyPort) throws InterruptedException {
         new Thread(() -> {
             log.info("add netty whose port is {} ...", nettyPort);
-            ChannelFuture future = null;
             try {
                 future = nettyServer.start(url, nettyPort);
+                latch.countDown();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -60,22 +64,36 @@ public class NettyService {
             assert future != null;
             future.channel().closeFuture().syncUninterruptibly();
         }).start();
+        latch.await();
+        latch = new CountDownLatch(1);
+        return future;
     }
 
-    public String execute(String request) {
+    public void stopNetty(ChannelFuture channelFuture) {
+        new Thread(() -> {
+            try {
+                channelFuture.channel().close().sync();
+                log.info("netty whose port is {} is stopped", port);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public String execute(Integer port, String request) {
         CommandDTO commandDTO = new CommandDTO(commandDao.getById(request));
         if (!"server".equals(commandDTO.getSender())) throw new ToolException(SC_BAD_REQUEST, "sender must be server!");
 
         nettyServer.setResponse("");
 
         if (ObjectUtils.isEmpty(commandDTO.getResponse())) { // no response
-            nettyServer.writeMsg(request);
+            nettyServer.writeMsg(port, request);
             return null;
         }
 
         // waiting for response from client
         nettyServer.setWaitForResponse(true);
-        nettyServer.writeMsg(request);
+        nettyServer.writeMsg(port, request);
         try {
             TimeUnit.MILLISECONDS.sleep(200);
             if (!ObjectUtils.isEmpty(commandDTO.getDelay()))

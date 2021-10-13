@@ -29,7 +29,8 @@ public class NettyServer {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private Channel channel;
-    private Map<String, Integer> clientMap = new HashMap<>();
+    private Map<Integer, Map<String, Integer>> portClientMap = new HashMap<>();
+    private Map<Integer, Map<String, Channel>> portChannelMap = new HashMap<>();
     private boolean waitForResponse = false;
     private String response;
 
@@ -46,28 +47,25 @@ public class NettyServer {
         nettyServerHandler.setNettyServer(NettyServer.this);
     }
 
-    public synchronized void setClient(String name) {
-        this.clientMap.put(name, 1);
+    public synchronized void setClient(Integer port, String name) {
+        Map<String, Integer> clientMap = new HashMap<>();
+        clientMap.put(name, 1);
+        this.portClientMap.put(port, clientMap);
     }
 
-    public synchronized void removeClient(String name) {
-        this.clientMap.remove(name);
+    public synchronized void setChannel(Integer port, String name, Channel channel) {
+        Map<String, Channel> channelMap = new HashMap<>();
+        channelMap.put(name, channel);
+        this.portChannelMap.put(port, channelMap);
     }
 
-    public synchronized boolean getClientMapSize() {
-        return this.clientMap.size() > 0;
+    public synchronized Map<String, Channel> getChannelMap(Integer port) {
+        return this.portChannelMap.get(port);
     }
 
-    private Map<String, Channel> channelMap = new HashMap<>();
-
-    public synchronized void setChannel(String name, Channel channel) {
-        this.channelMap.put(name, channel);
+    public synchronized Map<String, Integer> getClientMap(Integer port) {
+        return this.portClientMap.get(port);
     }
-
-    public synchronized Map<String, Channel> getChannelMap() {
-        return this.channelMap;
-    }
-
 
     public void setWaitForResponse(boolean waitForResponse) {
         this.waitForResponse = waitForResponse;
@@ -87,6 +85,7 @@ public class NettyServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
+                            nettyServerHandler.setNettyPort(port);
                             socketChannel.pipeline().addLast(nettyServerHandler);
                         }
                     });
@@ -106,14 +105,14 @@ public class NettyServer {
         return f;
     }
 
-    public boolean writeMsg(String msg) {
+    public boolean writeMsg(Integer port, String msg) {
         boolean errorFlag = false;
-        channelMap = getChannelMap();
+        Map<String, Channel> channelMap = getChannelMap(port);
         if (channelMap.size() == 0) {
             log.info("channel size is 0");
             return true;
         }
-        Set<String> keySet = clientMap.keySet();
+        Set<String> keySet = getClientMap(port).keySet();
         for (String key : keySet) {
             try {
                 channel = channelMap.get(key);

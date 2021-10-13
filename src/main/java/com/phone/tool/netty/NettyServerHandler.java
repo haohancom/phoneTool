@@ -25,6 +25,7 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
     private CommandDao commandDao;
 
     private NettyServer nettyServer;
+    Integer port = null;
     private int counter = 0;
 
     public NettyServerHandler(NettyServer nettyServer){
@@ -33,6 +34,10 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
 
     public void setNettyServer(NettyServer nettyServer) {
         this.nettyServer = nettyServer;
+    }
+
+    public void setNettyPort(Integer port) {
+        this.port = port;
     }
 
     @Override
@@ -74,8 +79,8 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         String clientName = ctx.channel().remoteAddress().toString();
         log.info("RemoteAddress : {} active !", clientName);
-        nettyServer.setClient(clientName);
-        nettyServer.setChannel(clientName,ctx.channel());
+        nettyServer.setClient(port, clientName);
+        nettyServer.setChannel(port, clientName,ctx.channel());
         super.channelActive(ctx);
         counter = 0;
     }

@@ -62,7 +62,7 @@ public class CommandsController {
 
     @PostMapping(path = "/command/execute")
     @ResponseBody
-    public ExecutionResponse executeCommand(@NotNull @RequestParam("id") String id) {
-        return new ExecutionResponse(nettyService.execute(id));
+    public ExecutionResponse executeCommand(@NotNull @RequestParam("port") String port, @NotNull @RequestParam("id") String id) {
+        return new ExecutionResponse(nettyService.execute(Integer.parseInt(port), id));
     }
 }

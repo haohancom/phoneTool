@@ -29,11 +29,15 @@
 			});
 		}
 
-		function execute(id) {
+		function execute(port, id) {
+			var dataJSON = {};
+			dataJSON["port"] = port;
+			dataJSON["id"] = id;
 			$.ajax({
 				type: 'POST',
 				url: "/phone/tool/api/command/execute",
-				data: { "id": id },
+				dataType: "json",
+				data: JSON.stringify(dataJSON),
 				success: function (result) {
 				},
 				error: function (result) {
@@ -113,10 +117,13 @@
 						render: function (data, type, row, meta) {
 							var actionHtml;
 							var id = row.request.replaceAll("\\", "\\\\");
+							// todo : change port
+							var port = "9000";
 							actionHtml = '<a href=javascript:queryCommandsAndCpoy("' + id + '")>Copy</a>';
 							actionHtml = actionHtml + ' | <a href=javascript:deleteCommands("' + id + '")>Delete</a>';
 							if (row.sender === "server") {
-								actionHtml = actionHtml + ' | <a href=javascript:execute("' + id + '")>Execute</a> ';
+								//todo fix here
+								actionHtml = actionHtml + ' | <a href=javascript:execute("' + port + id + '")>Execute</a> ';
 							}
 							return actionHtml;
 						}
