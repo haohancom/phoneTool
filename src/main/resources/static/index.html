@@ -31,13 +31,10 @@
 
 		function execute(port, id) {
 			var dataJSON = {};
-			dataJSON["port"] = port;
-			dataJSON["id"] = id;
 			$.ajax({
 				type: 'POST',
 				url: "/phone/tool/api/command/execute",
-				dataType: "json",
-				data: JSON.stringify(dataJSON),
+				data: { "id": id , "port": port},
 				success: function (result) {
 				},
 				error: function (result) {
@@ -122,8 +119,7 @@
 							actionHtml = '<a href=javascript:queryCommandsAndCpoy("' + id + '")>Copy</a>';
 							actionHtml = actionHtml + ' | <a href=javascript:deleteCommands("' + id + '")>Delete</a>';
 							if (row.sender === "server") {
-								//todo fix here
-								actionHtml = actionHtml + ' | <a href=javascript:execute("' + port + id + '")>Execute</a> ';
+								actionHtml = actionHtml + ' | <a href=javascript:execute("' + port + '","' + id + '")>Execute</a> ';
 							}
 							return actionHtml;
 						}
