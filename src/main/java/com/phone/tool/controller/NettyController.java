@@ -35,13 +35,13 @@ public class NettyController {
     @PostMapping(path = "/addnetty")
     @ResponseBody
     public void addNetty(@RequestParam("port") String port, HttpServletResponse response) throws InterruptedException {
-        ChannelFuture channelFuture = nettyService.addNetty(Integer.parseInt(port));
+        ChannelFuture channelFuture = nettyService.addNetty(port);
         channelFutureMap.put(Integer.valueOf(port), channelFuture);
     }
 
     @PostMapping(path = "/stopnetty")
     @ResponseBody
     public void stopNetty(@RequestParam("port") String port, HttpServletResponse response) {
-        nettyService.stopNetty(channelFutureMap.get(Integer.parseInt(port)));
+        nettyService.stopNetty(channelFutureMap.get(Integer.parseInt(port)), port);
     }
 }

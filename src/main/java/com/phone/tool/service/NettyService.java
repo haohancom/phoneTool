@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -45,15 +46,16 @@ public class NettyService {
         portsService.insertPorts(new PortsDTO("9000"));
         List<PortsDTO> portsDTOList =  portsService.getAllPorts();
         for (PortsDTO portsDTO : portsDTOList) {
-            addNetty(Integer.parseInt(portsDTO.getPort()));
+            addNetty(portsDTO.getPort());
         }
     }
 
-    public ChannelFuture addNetty(int nettyPort) throws InterruptedException {
+    public ChannelFuture addNetty(String nettyPort) throws InterruptedException {
+        portsService.insertPorts(new PortsDTO(String.valueOf(nettyPort)));
         new Thread(() -> {
             log.info("add netty whose port is {} ...", nettyPort);
             try {
-                future = nettyServer.start(url, nettyPort);
+                future = nettyServer.start(url, Integer.parseInt(nettyPort));
                 latch.countDown();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -67,7 +69,8 @@ public class NettyService {
         return future;
     }
 
-    public void stopNetty(ChannelFuture channelFuture) {
+    public void stopNetty(ChannelFuture channelFuture, String port) {
+        portsService.deletePorts(port);
         new Thread(() -> {
             try {
                 channelFuture.channel().close().sync();
