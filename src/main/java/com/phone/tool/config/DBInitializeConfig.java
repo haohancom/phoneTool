@@ -30,6 +30,10 @@ public class DBInitializeConfig {
                             "function_name varchar(128) not null," +
                             "description varchar(128) )"
             ) ;
+            statement.executeUpdate(
+                    "CREATE TABLE IF NOT EXISTS Ports(" +
+                            "port varchar(128) Primary key)"
+            );
             statement.close();
             connection.close();
         }

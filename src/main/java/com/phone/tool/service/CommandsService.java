@@ -34,6 +34,7 @@ public class CommandsService {
     }
 
     public Commands insertCommands(String request, String response, String delay, String sender, String receiver, String function, String description) {
+        validateDelay(delay);
         Commands commands = new Commands();
         commands.setRequest(request);
         commands.setResponse(response);
@@ -68,7 +69,7 @@ public class CommandsService {
         commandDao.updateResponse(response, id);
     }
 
-    public void validateDelay(String delay) {
+    private void validateDelay(String delay) {
         if (ObjectUtils.isEmpty(delay)) return;
         try {
             Long.valueOf(delay);

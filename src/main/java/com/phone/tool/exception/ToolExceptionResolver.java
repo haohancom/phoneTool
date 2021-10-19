@@ -24,7 +24,7 @@ public class ToolExceptionResolver extends ResponseEntityExceptionHandler {
         int status = ex.getStatusCode();
         response.setStatus(status);
         Map<String, Object> exceptionResult = buildExceptionResult(status, ex.getMessage());
-        log.error("IVRMgr Server Exception : {}, status : {}", ex, status);
+        log.error("Server Exception : {}, status : {}", ex, status);
         return new ResponseEntity(new ObjectMapper().writeValueAsString(exceptionResult), HttpStatus.valueOf(status));
     }
 
