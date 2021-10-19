@@ -2,6 +2,7 @@ package com.phone.tool.service;
 
 import com.phone.tool.dao.CommandDao;
 import com.phone.tool.dto.CommandDTO;
+import com.phone.tool.dto.PortsDTO;
 import com.phone.tool.exception.ToolException;
 import com.phone.tool.netty.NettyServer;
 import io.netty.channel.ChannelFuture;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +28,9 @@ public class NettyService {
     @Autowired
     CommandDao commandDao;
 
+    @Autowired
+    PortsService portsService;
+
     @Value("${netty.port}")
     private int port;
 
@@ -36,19 +41,12 @@ public class NettyService {
     private CountDownLatch latch = new CountDownLatch(1);
 
     @PostConstruct
-    public void initNetty() {
-        new Thread(() -> {
-            log.info("init netty ...");
-            ChannelFuture startFuture = null;
-            try {
-                startFuture = nettyServer.start(url, port);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> nettyServer.destroy()));
-            assert startFuture != null;
-            startFuture.channel().closeFuture().syncUninterruptibly();
-        }).start();
+    public void initNetty() throws InterruptedException {
+        portsService.insertPorts(new PortsDTO("9000"));
+        List<PortsDTO> portsDTOList =  portsService.getAllPorts();
+        for (PortsDTO portsDTO : portsDTOList) {
+            addNetty(Integer.parseInt(portsDTO.getPort()));
+        }
     }
 
     public ChannelFuture addNetty(int nettyPort) throws InterruptedException {
