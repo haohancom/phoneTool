@@ -41,14 +41,14 @@ public class NettyService {
     private ChannelFuture future = null;
     private CountDownLatch latch = new CountDownLatch(1);
 
-    @PostConstruct
-    public void initNetty() throws InterruptedException {
-        portsService.insertPorts(new PortsDTO("9000"));
-        List<PortsDTO> portsDTOList =  portsService.getAllPorts();
-        for (PortsDTO portsDTO : portsDTOList) {
-            addNetty(portsDTO.getPort());
-        }
-    }
+//    @PostConstruct
+//    public void initNetty() throws InterruptedException {
+//        portsService.insertPorts(new PortsDTO("9000"));
+//        List<PortsDTO> portsDTOList =  portsService.getAllPorts();
+//        for (PortsDTO portsDTO : portsDTOList) {
+//            addNetty(portsDTO.getPort());
+//        }
+//    }
 
     public ChannelFuture addNetty(String nettyPort) throws InterruptedException {
         portsService.insertPorts(new PortsDTO(String.valueOf(nettyPort)));

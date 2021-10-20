@@ -1,7 +1,5 @@
 package com.phone.tool.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phone.tool.dto.DTOData;
 import com.phone.tool.dto.PortsDTO;
 import com.phone.tool.service.PortsService;
@@ -32,7 +30,7 @@ public class PortsController {
 
     @PostMapping(path = "/port")
     @ResponseBody
-    public void addPort(@NotNull @RequestParam("port") String port) throws JsonProcessingException {
+    public void addPort(@NotNull @RequestParam("port") String port) {
         PortsDTO portsDTO = new PortsDTO(port);
         portsService.insertPorts(portsDTO);
     }

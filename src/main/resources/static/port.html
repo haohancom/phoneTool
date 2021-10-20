@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+    <title>Web App Ports List</title>
+    <link rel="stylesheet" type="text/css" href="./css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/demo.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/jquery.ui.widget.js"></script>
+    <script src="./js/jquery.iframe-transport.js"></script>
+
+    <script>
+        function deletePorts(port) {
+            $.ajax({
+                type: 'POST',
+                url: "/netty/api/stopnetty",
+                data: { "port": port },
+                success: function (result) {
+                    window.location.reload();
+                },
+                error: function (result) {
+                    alert("command deleted failed !")
+                }
+            });
+        }
+
+        function insertPort(port) {
+            $.ajax({
+                type: 'POST',
+                url: "/netty/api/addnetty",
+                data: {"port": port},
+                success: function (result) {
+                    window.location.reload();
+                },
+                error: function (result) {
+                    alert("command insert failed !")
+                }
+            });
+        }
+
+        function getPortsTable(){
+            $('#Ports').DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "ajax": "/phone/tool/api/ports",
+                columns: [
+                    {
+                        data: "port"
+                    },
+                    {
+                        render: function (data, type, row, meta) {
+                            var actionHtml;
+                            var id = row.port;
+                            actionHtml = ' | <a href=javascript:deletePorts("' + id + '")>Delete</a>';
+                            return actionHtml;
+                        }
+                    }
+                ]
+            });
+
+        }
+        $(document).ready(function () {
+            getPortsTable();
+
+            $("#insert").click(function() {
+                var port = $("#port_num").val();
+                insertPort(port);
+            })
+
+        });
+    </script>
+</head>
+
+<body class="dt-example">
+
+<div class="container">
+    <div id="inputbox">
+        <p>please input Port num to add netty Port</p>
+        <p>ports_info : <input id="port_num" type="text"></p>
+        <p>e.g. : 9001</p>
+    </div>
+    <button id="insert" class="ui-button ui-widget ui-corner-all">insert</button>
+
+    <table id="Ports" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>netty port</th>
+            <th>operation</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+</body>
+</html>
