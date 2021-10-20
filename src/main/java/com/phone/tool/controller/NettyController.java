@@ -33,7 +33,8 @@ public class NettyController {
 
     private final Map<Integer, ChannelFuture> channelFutureMap = new HashMap<>();
 
-    private final String DEFAULT_PORT_NUM = "9000";
+    private static final String DEFAULT_PORT_NUM = "9000";
+
     @PostConstruct
     public void initNetty() throws InterruptedException {
         boolean defaultPortIsStarted = false;
