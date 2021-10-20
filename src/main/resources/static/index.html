@@ -15,6 +15,10 @@
 	<script src="./js/jquery.iframe-transport.js"></script>
 
 	<script>
+		function addElementForSelector(){
+			$('#portselector').append('<option value=val>text</option>');
+		}
+
 		function deleteCommands(id) {
 			$.ajax({
 				type: 'DELETE',
@@ -114,8 +118,10 @@
 						render: function (data, type, row, meta) {
 							var actionHtml;
 							var id = row.request.replaceAll("\\", "\\\\");
-							// todo : change port
-							var port = "9000";
+							// todo refresh page if select item
+							var select = $('#portselector option:selected');
+							var port = select.text();
+
 							actionHtml = '<a href=javascript:queryCommandsAndCpoy("' + id + '")>Copy</a>';
 							actionHtml = actionHtml + ' | <a href=javascript:deleteCommands("' + id + '")>Delete</a>';
 							if (row.sender === "server") {
@@ -130,6 +136,7 @@
 		}
 		$(document).ready(function () {
 			getCommandsTable();
+			addElementForSelector();
 
 			$("#insert").click(function() {
 				var json = $("#command_json").val().replaceAll("\\", "\\\\");
@@ -154,9 +161,12 @@
 	<div id="inputbox">
 		<p>please input Commands info to create Commands</p>
 		<p>commands_info : <input id="command_json" type="text"></p>
+		<button id="insert" class="ui-button ui-widget ui-corner-all">insert</button>
 		<p>e.g. : { "request": "S010\n", "response": "OK\n", "delay": "", "sender": "client", "receiver": "server", "function_name": "关闭LED光源", "description": "通知下位机关闭外观测试用的光源" }</p>
 	</div>
-	<button id="insert" class="ui-button ui-widget ui-corner-all">insert</button>
+	<select id="portselector">
+		<option value="9000" selected="selected">9000</option>
+	</select>
 
 	<table id="Commands" class="display" style="width:100%">
 		<thead>
