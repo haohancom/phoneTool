@@ -87,7 +87,7 @@
 		}
 
 		function getCommandsTable(){
-			$('#Commands').DataTable({
+			var table = $('#Commands').DataTable({
 				"paging": false,
 				"ordering": false,
 				"info": false,
@@ -118,7 +118,6 @@
 						render: function (data, type, row, meta) {
 							var actionHtml;
 							var id = row.request.replaceAll("\\", "\\\\");
-							// todo refresh page if select item
 							var select = $('#portselector option:selected');
 							var port = select.text();
 
@@ -132,10 +131,10 @@
 					}
 				]
 			});
-
+			return table;
 		}
 		$(document).ready(function () {
-			getCommandsTable();
+			var table = getCommandsTable();
 			addElementForSelector();
 
 			$("#insert").click(function() {
@@ -143,6 +142,9 @@
 				insertCommand(json);
 			})
 
+			$("#portselector").change(function () {
+				table.ajax.reload();
+			})
 		});
 
 	</script>
