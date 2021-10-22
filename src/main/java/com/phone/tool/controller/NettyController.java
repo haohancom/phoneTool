@@ -37,17 +37,13 @@ public class NettyController {
 
     @PostConstruct
     public void initNetty() throws InterruptedException {
-        boolean defaultPortIsStarted = false;
+        addNetty(DEFAULT_PORT_NUM);
         List<PortsDTO> portsDTOList =  portsService.getAllPorts();
         for (PortsDTO portsDTO : portsDTOList) {
             if (DEFAULT_PORT_NUM.equals(portsDTO.getPort())) {
-                defaultPortIsStarted = true;
+                continue;
             }
             addNetty(portsDTO.getPort());
-        }
-
-        if (!defaultPortIsStarted) {
-            addNetty(DEFAULT_PORT_NUM);
         }
     }
 
