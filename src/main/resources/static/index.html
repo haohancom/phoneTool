@@ -16,7 +16,24 @@
 
 	<script>
 		function addElementForSelector(){
-			$('#portselector').append('<option value=val>text</option>');
+			$.ajax({
+				type: 'GET',
+				url: "/phone/tool/api/ports",
+				success: function (result) {
+				},
+				error: function (result) {
+					alert("get ports failed !")
+				}
+			}).done(function (array) {
+				$.each( array.data, function( key, value ) {
+					var port_num = value.port.replace("\"","").replace("\'","");
+					if (port_num === '9000') {
+						$('#portselector').append('<option value=' + port_num + ' selected="selected">' + port_num + '</option>');
+					} else {
+						$('#portselector').append('<option value=' + port_num + '>' + port_num + '</option>');
+					}
+				});
+			})
 		}
 
 		function deleteCommands(id) {
@@ -167,7 +184,6 @@
 		<p>e.g. : { "request": "S010\n", "response": "OK\n", "delay": "", "sender": "client", "receiver": "server", "function_name": "关闭LED光源", "description": "通知下位机关闭外观测试用的光源" }</p>
 	</div>
 	<select id="portselector">
-		<option value="9000" selected="selected">9000</option>
 	</select>
 
 	<table id="Commands" class="display" style="width:100%">
