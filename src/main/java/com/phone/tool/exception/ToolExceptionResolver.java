@@ -20,7 +20,7 @@ public class ToolExceptionResolver extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = ToolException.class)
-    public ResponseEntity handleIVRMgrServerException(ToolException ex, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseEntity handleServerException(ToolException ex, HttpServletResponse response) throws JsonProcessingException {
         int status = ex.getStatusCode();
         response.setStatus(status);
         Map<String, Object> exceptionResult = buildExceptionResult(status, ex.getMessage());
